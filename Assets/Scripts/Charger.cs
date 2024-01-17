@@ -24,6 +24,8 @@ public class Charger : MonoBehaviour
     {
         if (collision != null && collision.gameObject.CompareTag("Pin"))
         {
+            if (status == Enum.FullyCharge) return;
+
             status = Enum.FullyCharge;
 
             GameObject vfx = Instantiate(vfxTouch, transform.position, Quaternion.identity) as GameObject;
@@ -55,9 +57,8 @@ public class Charger : MonoBehaviour
                 Destroy(vfx, 1f);
 
                 gameObject.SetActive(false);
-                collision.gameObject.SetActive(false);
-                GameManager.Instance.levels[GameManager.Instance.GetCurrentIndex()].gameObjects.Remove(collision.gameObject);
-                GameManager.Instance.CheckLevelUp();
+
+                collision.gameObject.GetComponent<Phone>().Reduce();
             }
         }
     }
